@@ -1,0 +1,66 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 28
+
+
+    defaultConfig {
+        applicationId "com.synative.purchase.plugin"
+        minSdkVersion 15
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+
+    }
+
+    signingConfigs {
+        debug {
+            try {
+                storeFile file("../../altahook.jks")
+                storePassword "alta2018"
+                keyAlias "key0"
+                keyPassword "alta2018"
+                v1SigningEnabled true
+                v2SigningEnabled false
+            }
+            catch (ex) {
+                ex.printStackTrace()
+                throw new InvalidUserDataException("秘钥用户名或密码错误${ex.getMessage()}")
+            }
+        }
+        release {
+            try {
+                storeFile file("../../altahook.jks")
+                storePassword "alta2018"
+                keyAlias "key0"
+                keyPassword "alta2018"
+                v1SigningEnabled true
+                v2SigningEnabled false
+            }
+            catch (ex) {
+                throw new InvalidUserDataException("秘钥用户名或密码错误")
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+
+            signingConfig signingConfigs.release
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            signingConfig signingConfigs.debug
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    compileOnly 'de.robv.android.xposed:api:82'
+    compileOnly 'de.robv.android.xposed:api:82:sources'
+}
